@@ -10,7 +10,7 @@
     <button @click="getChat">Submit</button>
     <br />
     <hr />
-    <p>AI</p>
+    <p class="mt-3">AI</p>
     <!-- <div v-html="content"></div> -->
     <div>
       <div v-for="item in content" :key="item.content">
