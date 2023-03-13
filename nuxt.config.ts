@@ -14,10 +14,12 @@ export default defineNuxtConfig({
   // },
   runtimeConfig: {
     // The private keys which are only available within server-side
-    apiSecret: "",
+    apiSecret: process.env.OPENAI_API_KEY,
+    userIDSecret: process.env.OPENAI_API_USER,
     // Keys within public, will be also exposed to the client-side
     public: {
       apiKey: process.env.OPENAI_API_KEY || "default_api_url",
+      userID: process.env.OPENAI_API_USER
     }
   }
 })

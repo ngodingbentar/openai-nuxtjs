@@ -9,6 +9,7 @@
         <div :class="item.role" class="item flex relative mb-4 mx-4">
           <div class="text relative bottom-2 py-1 px-4">
             <p class="w-fit text-left">{{ item.content }}</p>
+            <!-- <div v-html="item.content" class="w-fit text-left"></div> -->
           </div>
         </div>
       </div>
@@ -45,7 +46,8 @@ const fetchChat= async () => {
       },
       body: JSON.stringify({
         "model": "gpt-3.5-turbo",
-        "messages": [{"role": "user", "content": `${chat.value}`}]
+        "messages": [{"role": "user", "content": `${chat.value}`}],
+        "user": `${config.userID}`,
       }),
     }
   )
@@ -59,9 +61,8 @@ const getChat = async () => {
     role: role.value,
     content: chat.value
   })
-  chat.value = ''
   loading.value = true
-
+  
   await fetchChat()
   .then((data) => {
     console.log('data', data)
@@ -69,6 +70,7 @@ const getChat = async () => {
       role: 'ai',
       content: data?.choices[0]?.message?.content || ''
     })
+    chat.value = ''
     loading.value = false
   })
 }
