@@ -1,14 +1,29 @@
 <template>
   <div class="bg-gray-200 text-center py-6">
-    <h3 v-if="!loading">Grammar</h3>
+    <h3 v-if="!loading">English to other languages</h3>
     <h3 v-else>LOADING...</h3>
+  </div>
+  <div class="flex">
+    <div>
+      <p>Option 1</p>
+      <input v-model="lang1" />
+    </div>
+    <!-- <div>
+      <p>Option 2</p>
+      <input v-model="lang2" />
+    </div>
+    <div>
+      <p>Option 3</p>
+      <input v-model="lang3" />
+    </div> -->
   </div>
   <div>
     <div class="mt-6 mb-20">
       <div v-for="item in content" :key="item.content">
         <div :class="item.role" class="item flex relative mb-4 mx-4">
           <div class="text relative bottom-2 py-1 px-4">
-            <p class="w-fit text-left">{{ item.content }}</p>
+            <!-- <p class="w-fit text-left">{{ item.content }}</p> -->
+            <div v-html="item.content" class="w-fit text-left"></div>
           </div>
         </div>
       </div>
@@ -21,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-// reference: https://platform.openai.com/examples/default-grammar
+// reference: https://platform.openai.com/examples/default-translate
 
 import { Configuration, OpenAIApi } from "openai";
 
@@ -40,6 +55,9 @@ const content = ref<Message[]>([])
 const chat = ref('')
 const role = ref('user')
 const loading = ref(false)
+const lang1 = ref('Indonesian')
+const lang2 = ref('Spanish')
+const lang3 = ref('Japanese')
 
 const fetchEdit =async () => {
   if (loading.value) return
@@ -52,14 +70,16 @@ const fetchEdit =async () => {
 
   await openai.createCompletion({
     model: "text-davinci-003",
-    prompt: `Correct this to standard English:\n\n${chat.value}.`,
-    temperature: 0,
-    max_tokens: 60,
+    // prompt: `Translate this into 1. ${lang1.value}, 2. ${lang2.value} and 3. ${lang3.value}:\n\n${chat.value}\n\n1.`,
+    prompt: `Translate this into 1. ${lang1.value}:\n\n${chat.value}\n\n1.`,
+    temperature: 0.3,
+    max_tokens: 100,
     top_p: 1.0,
     frequency_penalty: 0.0,
     presence_penalty: 0.0,
   })
   .then((data) => {
+    console.log('data', data)
     content.value.push({
       role: 'ai',
       content: data?.data?.choices[0]?.text || ''
