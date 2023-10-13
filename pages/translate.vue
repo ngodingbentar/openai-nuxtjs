@@ -3,35 +3,33 @@
     <h3 v-if="!loading">English to other languages</h3>
     <h3 v-else>LOADING...</h3>
   </div>
-  <div class="flex">
-    <div>
-      <p>Option 1</p>
-      <input v-model="lang1" />
+  <div class="p-6">
+    <div class="flex">
+      <div class="flex">
+        <p>Select Languages :</p>
+        <!-- <input v-model="lang" /> -->
+        <select name="cars" id="cars" v-model="lang" class="ml-2">
+          <option value="Indonesia" class="p-2">Indonesia</option>
+          <option value="Japanese">Japanese</option>
+          <option value="Spanish">Spanish</option>
+        </select>
+      </div>
     </div>
-    <!-- <div>
-      <p>Option 2</p>
-      <input v-model="lang2" />
-    </div>
     <div>
-      <p>Option 3</p>
-      <input v-model="lang3" />
-    </div> -->
-  </div>
-  <div>
-    <div class="mt-6 mb-20">
-      <div v-for="item in content" :key="item.content">
-        <div :class="item.role" class="item flex relative mb-4 mx-4">
-          <div class="text relative bottom-2 py-1 px-4">
-            <!-- <p class="w-fit text-left">{{ item.content }}</p> -->
-            <div v-html="item.content" class="w-fit text-left"></div>
+      <div class="mt-6 mb-20">
+        <div v-for="item in content" :key="item.content">
+          <div :class="item.role" class="item flex relative mb-4 mx-4">
+            <div class="text relative bottom-2 py-1 px-4">
+              <div v-html="item.content" class="w-fit text-left"></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="footer">
-    <input v-model="chat" class="chat" />
-    <button @click="fetchEdit" class="ml-4 bg-gray-500 text-white p-3 rounded-lg">Send</button>
+    <div class="footer">
+      <input v-model="chat" class="chat" />
+      <button @click="fetchEdit" class="ml-4 bg-gray-500 text-white p-3 rounded-lg">Send</button>
+    </div>
   </div>
 </template>
 
@@ -55,9 +53,7 @@ const content = ref<Message[]>([])
 const chat = ref('')
 const role = ref('user')
 const loading = ref(false)
-const lang1 = ref('Indonesian')
-const lang2 = ref('Spanish')
-const lang3 = ref('Japanese')
+const lang = ref('Indonesian')
 
 const fetchEdit =async () => {
   if (loading.value) return
@@ -70,8 +66,7 @@ const fetchEdit =async () => {
 
   await openai.createCompletion({
     model: "text-davinci-003",
-    // prompt: `Translate this into 1. ${lang1.value}, 2. ${lang2.value} and 3. ${lang3.value}:\n\n${chat.value}\n\n1.`,
-    prompt: `Translate this into 1. ${lang1.value}:\n\n${chat.value}\n\n1.`,
+    prompt: `Translate this into 1. ${lang.value}:\n\n${chat.value}\n\n1.`,
     temperature: 0.3,
     max_tokens: 100,
     top_p: 1.0,
